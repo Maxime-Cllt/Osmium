@@ -1,5 +1,0 @@
-(executable
- (public_name compression)
- (name main)
- (libraries camlimages.graphics camlimages.jpeg gsl compression)
- (modules compression affichage main))

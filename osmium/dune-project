@@ -1,0 +1,26 @@
+(lang dune 3.14)
+
+(name osmium)
+
+(generate_opam_files true)
+
+(source
+ (github username/reponame))
+
+(authors "Maxime Colliat & Rahman Yimaz")
+
+(maintainers "Maxime Colliat <")
+
+(license LICENSE)
+
+(documentation https://url/to/documentation)
+
+(package
+ (name osmium)
+ (synopsis "SVD and GSVD in OCaml")
+ (description "See README.md for more information.")
+ (depends ocaml dune)
+ (tags
+  (topics "to describe" your project)))
+
+; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project

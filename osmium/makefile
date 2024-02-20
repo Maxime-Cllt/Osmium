@@ -1,5 +1,5 @@
 all:
-	dune exec compression
+	dune exec osmium
 
 clean:
 	dune clean

@@ -1,2 +1,6 @@
 /.idea/
 .DS_Store
+/osmium/_build/
+.vscode
+docker-compose.yml
+Dockerfile

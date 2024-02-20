@@ -14,7 +14,7 @@ let compare_result image image_compresse =
 
     Graphics.draw_image (Graphics.make_image array_image) offset_x offset_y; (* Affichage de l'image de base *)
     Graphics.draw_image graphe_image_compresse ((Array.length array_image.(0))+offset_y) offset_y; (* Affichage de l'image compressée*)
-    Jpeg.save "../images/image_compresse.jpeg" [] (Images.Rgb24 (Graphic_image.image_of graphe_image_compresse));
+    Jpeg.save "../documentation/images/image_compresse.jpeg" [] (Images.Rgb24 (Graphic_image.image_of graphe_image_compresse));
     interactive();; (* Création d'une session interactive pour voir les résultats *)
 
 let assign_value r g b =

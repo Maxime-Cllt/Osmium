@@ -15,12 +15,31 @@ Nous utiliserons la librairie OCamlgsl, qui est une interface avec la GNU Scient
 
 Avant de pouvoir exécuter le programme, assurez-vous d'avoir installé les dépendances suivantes :
 
-- OCaml
-- OCamlgsl
+- oCaml
+- opam
+- gsl
 - graphics
-- GNU Scientific Library (GSL)
+- camlimages
 
 Vous pouvez installer OCaml en utilisant Opam, le gestionnaire de paquets pour OCaml. Pour installer OCamlgsl, vous pouvez utiliser Opam également :
 
 ```bash
 opam install ocamlgsl
+```
+
+Pour installer la librairie camlimages, vous pouvez utiliser la commande suivante :
+
+```bash
+opam install camlimages
+```
+
+## Exécution
+
+Pour exécuter le programme, vous pouvez utiliser la commande suivante :
+
+```bash
+dune exec osmium
+```
+
+## Auteurs
+
