@@ -23,13 +23,21 @@ let image_blue_compresse = Compression.convert_array_float_to_int
         (Compression.convert_array_int_to_float array_image_blue) taux_compression true) in
 
 
+
 let image_compresse = Affichage.assign_value image_red_compresse image_green_compresse image_blue_compresse in
 
-(* Résultat intermédiaire*)
-(*
-let image_compresse = Compression.convert_array_float_to_int
-    (Compression.make_compression
-        (Compression.convert_array_int_to_float array_image) taux_compression true) in
-*)
+Printf.printf "Compression terminée.\n";
+print_newline ();
+Printf.printf "Taille de l'image originale : %d\n" (Array.length array_image);
+Printf.printf "Taille de l'image compressée : %d\n" (Array.length image_compresse);
+print_newline ();
+Printf.printf "Taux de compression : %f\n" (float_of_int (Array.length image_compresse) /. float_of_int (Array.length array_image));
+print_newline ();
 
-Affichage.compare_result image image_compresse;;
+
+
+
+
+
+
+

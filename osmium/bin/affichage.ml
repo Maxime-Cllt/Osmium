@@ -1,5 +1,6 @@
+
 let compare_result image image_compresse =
-    (* Fonction qui permet de créer une sesion interactive que l'on peut quitter avec la touche 'q' *)
+    (* Fonction qui permet de créer une session interactive que l'on peut quitter avec la touche 'q' *)
     Graphics.open_graph "";
     let rec interactive () =
         let event = Graphics.wait_next_event [Graphics.Key_pressed] in
