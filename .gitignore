@@ -4,3 +4,4 @@
 .vscode
 docker-compose.yml
 Dockerfile
+/documentation/compresse

@@ -1,4 +1,3 @@
-
 let compare_result image image_compresse =
     (* Fonction qui permet de créer une session interactive que l'on peut quitter avec la touche 'q' *)
     Graphics.open_graph "";
