@@ -4,7 +4,7 @@
 (*let image = "../documentation/images/homme_carre.jpeg" in (* carrée *)*)
 (*let image = "../documentation/images/homme_paysage.jpeg" in (* paysage *)*)
 (*let image = "../documentation/images/homme_portrait.jpeg" in (* portrait *)*)
-let taux_compression = 0.9 in
+let taux_compression = 0.50 in
 let array_image = Graphic_image.array_of_image (Jpeg.load image []) in
 
 let (array_image_red, array_image_green, array_image_blue) = Affichage.get_colors array_image in
@@ -35,10 +35,6 @@ print_newline ();
 let compare_result image image_compresse =
     (* Fonction qui permet de créer une session interactive que l'on peut quitter avec la touche 'q' *)
     Graphics.open_graph "";
-    let rec interactive () =
-        let event = Graphics.wait_next_event [Graphics.Key_pressed] in
-        if event.key == 'q' then exit 0
-        else (print_char event.key; print_newline ()); interactive () in
 
     (* Voir *)
     let graphe_image_compresse = Graphics.make_image image_compresse in
