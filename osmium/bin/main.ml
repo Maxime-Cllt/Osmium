@@ -1,10 +1,7 @@
- let image = "../documentation/images/gmk100.jpeg" in
-
-let taux_compression = 0.50 in
+let image = "../documentation/images/gmk100.jpeg" in
+let taux_compression = 1.0 in
 let array_image = Graphic_image.array_of_image (Jpeg.load image []) in
-
 let (array_image_red, array_image_green, array_image_blue) = Affichage.get_colors array_image in
-print_newline ();
 
 (* Compression *)
 let compress_and_convert color_array =
@@ -23,14 +20,10 @@ let image_compresse = Affichage.assign_value image_red_compresse image_green_com
 Printf.printf "Compression terminée.\n";
 Printf.printf "Taille de l'image originale : %d\n" (Array.length array_image);
 Printf.printf "Taille de l'image compressée : %d\n" (Array.length image_compresse);
-let compare_result image image_compresse =
+let save_jpeg image_compresse =
     Graphics.open_graph "";
-    (* Voir *)
     let graphe_image_compresse = Graphics.make_image image_compresse in
-    let offset_x, offset_y = 50, 100 in
-    let array_image = Graphic_image.array_of_image (Jpeg.load image []) in (* Ouverture de l'image de base*)
-    Graphics.draw_image (Graphics.make_image array_image) offset_x offset_y; (* Affichage de l'image de base *)
-    Graphics.draw_image graphe_image_compresse ((Array.length array_image.(0))+offset_y) offset_y; (* Affichage de l'image compressée*)
     Jpeg.save "../documentation/compresse/image_compresse.jpeg" [] (Images.Rgb24 (Graphic_image.image_of graphe_image_compresse)) in
+    Graphics.close_graph ();
 
-compare_result image image_compresse;;
+save_jpeg image_compresse;;
