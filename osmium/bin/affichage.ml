@@ -1,4 +1,8 @@
 
+(* [assign_value r g b] prend en argument trois matrices de taille (n, m) où n est le nombre de lignes et m le nombre de colonnes de l'image.
+Chaque matrice contient les valeurs des composantes rouge, verte et bleue de chaque pixel de l'image.
+La fonction retourne une matrice de taille (n, m) où n est le nombre de lignes et m le nombre de colonnes de l'image.
+Chaque pixel de la matrice retournée contient les valeurs des composantes rouge, verte et bleue de chaque pixel de l'image. *)
 let assign_value r g b =
   let nb_lignes = Array.length r in
   let nb_colonnes = Array.length r.(0) in
@@ -19,9 +23,9 @@ Chaque matrice contient les valeurs des composantes rouge, verte et bleue de cha
 let get_colors image =
   let nb_lignes = Array.length image in
   let nb_colonnes = Array.length image.(0) in
-  let array_image_red = Array.make_matrix nb_lignes nb_colonnes 0 in
-  let array_image_green = Array.make_matrix nb_lignes nb_colonnes 0 in
-  let array_image_blue = Array.make_matrix nb_lignes nb_colonnes 0 in
+  let array_image_rouge = Array.make_matrix nb_lignes nb_colonnes 0 in
+  let array_image_verte = Array.make_matrix nb_lignes nb_colonnes 0 in
+  let array_image_bleu = Array.make_matrix nb_lignes nb_colonnes 0 in
 
   for i = 0 to nb_lignes - 1 do
     let ligne = image.(i) in
@@ -31,14 +35,14 @@ let get_colors image =
 
     for j = 0 to nb_colonnes - 1 do
       let pixel = ligne.(j) in
-      let red = pixel lsr 16 land 0xff in
+      let red = pixel lsr 16 land 0xff in (* lsr = logical shift right, land = logical and, 0xff = 255 *)
       let green = pixel lsr 8 land 0xff in
-      let blue = pixel land 0xff in
+      let blue = pixel land 0xff in (* land = logical and, 0xff = 255 *)
 
       row_red.(j) <- red;
       row_green.(j) <- green;
       row_blue.(j) <- blue;
     done
   done;
-  array_image_red, array_image_green, array_image_blue
+  array_image_rouge, array_image_verte, array_image_bleu
 

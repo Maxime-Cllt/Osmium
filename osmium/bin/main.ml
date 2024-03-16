@@ -20,10 +20,7 @@ let image_compresse = Affichage.assign_value image_red_compresse image_green_com
 Printf.printf "Compression terminée.\n";
 Printf.printf "Taille de l'image originale : %d\n" (Array.length array_image);
 Printf.printf "Taille de l'image compressée : %d\n" (Array.length image_compresse);
-let save_jpeg image_compresse =
-    Graphics.open_graph "";
-    let graphe_image_compresse = Graphics.make_image image_compresse in
-    Jpeg.save "../documentation/compresse/image_compresse.jpeg" [] (Images.Rgb24 (Graphic_image.image_of graphe_image_compresse)) in
-    Graphics.close_graph ();
-
-save_jpeg image_compresse;;
+Graphics.open_graph "";
+let graphe_image_compresse = Graphics.make_image image_compresse in
+Jpeg.save "../documentation/compresse/image_compresse.jpeg" [] (Images.Rgb24 (Graphic_image.image_of graphe_image_compresse));
+Graphics.close_graph ();

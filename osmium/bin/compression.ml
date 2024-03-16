@@ -77,8 +77,8 @@ let make_compression array compression_rate =
         (*     MxK          KxK            KxN             MxK           MxN     avec K le rang de la matrice renvoyée, calculé avec le taux de compression*)
     let (vecMat_u_comp, vecMat_s_comp, vecMat_vT_comp, vecMat_inter, vecMat_res) = compress_svd arrays_u array_s arrays_v nb_row nb_column compression_rate in
 
-    Linalg.matmult ~a:vecMat_u_comp ~b:vecMat_s_comp vecMat_inter;
-    Linalg.matmult ~a:vecMat_inter ~b:vecMat_vT_comp vecMat_res;
+    Linalg.matmult ~a:vecMat_u_comp ~b:vecMat_s_comp vecMat_inter; (* MxK *)
+    Linalg.matmult ~a:vecMat_inter ~b:vecMat_vT_comp vecMat_res; (* MxN *)
 
-    if padded then Array.sub (Vectmat.to_arrays vecMat_res) 0 (Array.length array) (* Retire les lignes qui ont été ajoutées*)
-    else Vectmat.to_arrays vecMat_res;;
+    if padded then Array.sub (Vectmat.to_arrays vecMat_res) 0 (Array.length array) (* Renvoie la matrice compressée sans les lignes ajoutées pour le padding*)
+    else Vectmat.to_arrays vecMat_res;; (* Renvoie la matrice compressée*)
