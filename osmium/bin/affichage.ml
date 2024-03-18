@@ -29,9 +29,9 @@ let get_colors image =
 
   for i = 0 to nb_lignes - 1 do
     let ligne = image.(i) in
-    let row_red = array_image_red.(i) in
-    let row_green = array_image_green.(i) in
-    let row_blue = array_image_blue.(i) in
+    let row_red = array_image_rouge.(i) in
+    let row_green = array_image_verte.(i) in
+    let row_blue = array_image_bleu.(i) in
 
     for j = 0 to nb_colonnes - 1 do
       let pixel = ligne.(j) in
