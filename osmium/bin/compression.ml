@@ -63,10 +63,8 @@ let make_compression array compression_rate =
         let sum_all_SV = Array.fold_left (+.) 0. array_s in
         let sum_comp_SV = Array.fold_left (+.) 0. array_s_comp in
         let ratio = sum_comp_SV /. sum_all_SV in
-        Printf.printf "La qualité de reconstruction est de %.4f\n" ratio;
-        let non_zero_s = Array.of_list (List.filter (fun x -> x <> 0. ) (Array.to_list array_s)) in
-        Printf.printf "Taille de l'image = (%d, %d)\n" nb_row nb_column;
-        Printf.printf "Rang de l'image = %d; Rang de la matrice compressée = %d\n" (Array.length non_zero_s) (Array.length (Vectmat.to_arrays vecMat_s_comp));
+        Printf.printf "La qualité de reconstruction est de \027[34m%.4f\n\027[0m" ratio;
+(*        let non_zero_s = Array.of_list (List.filter (fun x -> x <> 0. ) (Array.to_list array_s)) in *)
         (vecMat_u_comp, vecMat_s_comp, vecMat_vT_comp, vecMat_inter, vecMat_res) in
 
     assert(compression_rate <= 1.);
