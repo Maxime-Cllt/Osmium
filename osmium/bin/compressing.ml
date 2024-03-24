@@ -82,3 +82,20 @@ let make_compression array compression_rate =
 
     if padded then Array.sub (Vectmat.to_arrays vecMat_res) 0 (Array.length array) (* Renvoie la matrice compressée sans les lignes ajoutées pour le padding*)
     else Vectmat.to_arrays vecMat_res;; (* Renvoie la matrice compressée*)
+
+
+(* Compression de la matrice de couleur *)
+ let compress_and_convert_color_matrix color_array taux_compression message =
+  Printf.printf "Compression de la matrice %s...\n" message;
+  let float_array = convert_array_int_to_float color_array in
+      let compressed_array = make_compression float_array taux_compression in
+  convert_array_float_to_int compressed_array;;
+
+
+  (* Compression des 3 matrices de couleurs en utilisant le multi-threading *)
+  let compress_color_matrix_with_thread color_array taux_compression message =
+    let compressed_array_ref = ref None in
+    let compress_func () =
+      compressed_array_ref := Some (compress_and_convert_color_matrix color_array taux_compression message) in
+    let thread = Thread.create compress_func () in
+    thread, compressed_array_ref;; (* Return :  le thread et la référence de la matrice compressée *)

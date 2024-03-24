@@ -2,6 +2,6 @@
  (public_name osmium)
  (name main)
  (libraries camlimages.graphics camlimages.jpeg gsl threads osmium)
- (modules compression affichage main))
+ (modules compressing affichage main))
 
 

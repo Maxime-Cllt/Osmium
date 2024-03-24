@@ -46,3 +46,22 @@ let get_colors image =
   done;
   array_image_rouge, array_image_verte, array_image_bleu (* On retourne les trois matrices *)
 
+
+(* Calcul du PSNR de l'image originale et de l'image compressée *)
+let psnr original_image noisy_image max_value =
+  let sum_squared_diff = ref 0. in (* Initialisation de la somme des différences au carré *)
+  let m = Array.length original_image in (* Nombre de lignes *)
+  let n = Array.length original_image.(0) in (* Nombre de colonnes *)
+  for i = 0 to m - 1 do
+    for j = 0 to n - 1 do
+      let diff = float_of_int (original_image.(i).(j) - noisy_image.(i).(j)) in (* Différence entre les 2 images *)
+      sum_squared_diff := !sum_squared_diff +. (diff *. diff)  (* Somme des différences au carré *)
+    done;
+  done;
+  let mse = !sum_squared_diff /. (float_of_int (m * n)) in (* Moyenne des erreurs au carré *)
+  if mse = 0. then
+    infinity (* Si mse = 0, PSNR est infini *)
+  else
+    let max_val_sq = max_value *. max_value in (* max^2 *)
+    10. *. log10 (max_val_sq /. mse);; (* PSNR = 10 * log10(max^2 / mse) *)
+
