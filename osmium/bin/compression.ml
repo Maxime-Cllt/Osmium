@@ -1,8 +1,10 @@
 open Gsl;;
 
+(* Convertit un tableau de float en tableau de int *)
 let convert_array_float_to_int array_float =
   Array.map (Array.map int_of_float) array_float;;
 
+(* Convertit un tableau de int en tableau de float *)
 let convert_array_int_to_float array_int =
   Array.map (Array.map float_of_int) array_int;;
 

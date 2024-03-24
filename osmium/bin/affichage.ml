@@ -6,7 +6,7 @@ Chaque pixel de la matrice retournée contient les valeurs des composantes rouge
 let assign_value r g b =
   let nb_lignes = Array.length r in
   let nb_colonnes = Array.length r.(0) in
-  let image_compresse = Array.make_matrix nb_lignes nb_colonnes 0 in
+  let image_compresse = Array.make_matrix nb_lignes nb_colonnes 0 in (* On crée une matrice de taille (n, m) où n est le nombre de lignes et m le nombre de colonnes de l'image *)
   for i = 0 to nb_lignes - 1 do
     let ligne_r = r.(i) in
     let ligne_g = g.(i) in
@@ -27,22 +27,22 @@ let get_colors image =
   let array_image_verte = Array.make_matrix nb_lignes nb_colonnes 0 in
   let array_image_bleu = Array.make_matrix nb_lignes nb_colonnes 0 in
 
-  for i = 0 to nb_lignes - 1 do
+  for i = 0 to nb_lignes - 1 do (* On parcourt chaque ligne de l'image *)
     let ligne = image.(i) in
     let row_red = array_image_rouge.(i) in
     let row_green = array_image_verte.(i) in
     let row_blue = array_image_bleu.(i) in
 
-    for j = 0 to nb_colonnes - 1 do
+    for j = 0 to nb_colonnes - 1 do (* On parcourt chaque pixel de la ligne *)
       let pixel = ligne.(j) in
       let red = pixel lsr 16 land 0xff in (* lsr = logical shift right, land = logical and, 0xff = 255 *)
       let green = pixel lsr 8 land 0xff in
       let blue = pixel land 0xff in (* land = logical and, 0xff = 255 *)
 
-      row_red.(j) <- red;
+      row_red.(j) <- red; (* On remplit les matrices avec les valeurs des composantes rouge, verte et bleue de chaque pixel *)
       row_green.(j) <- green;
       row_blue.(j) <- blue;
     done
   done;
-  array_image_rouge, array_image_verte, array_image_bleu
+  array_image_rouge, array_image_verte, array_image_bleu (* On retourne les trois matrices *)
 

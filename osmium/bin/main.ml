@@ -7,7 +7,7 @@
 (* let image = "../documentation/images/lh2560x1707.jpg" in *)
 
 let file_name = Filename.chop_extension (Filename.basename image) in (* Nom du fichier sans l'extension *)
-let taux_compression = 1.0 in
+let taux_compression = 0.1 in
 
 (* Ouverture de l'image *)
 let type_array_array_image = Graphic_image.array_of_image (Jpeg.load image []) in
@@ -59,10 +59,34 @@ let image_blue_compresse = match !image_blue_compresse with
 let image_compresse_array_array = Affichage.assign_value image_red_compresse image_green_compresse image_blue_compresse in
 Printf.printf "Image originale : \027[34m[%dx%d]\027[0m,  Finale : \027[34m[%dx%d]\027[0m\n" (Array.length array_image_red) (Array.length array_image_red.(0)) (Array.length image_compresse_array_array) (Array.length image_compresse_array_array.(0));
 
+(* Calcul du PSNR de l'image originale et de l'image compressée *)
+let psnr original_image noisy_image max_value =
+  let sum_squared_diff = ref 0. in
+  let m = Array.length original_image in
+  let n = Array.length original_image.(0) in
+  for i = 0 to m - 1 do
+    for j = 0 to n - 1 do
+      let diff = float_of_int (original_image.(i).(j) - noisy_image.(i).(j)) in (* Différence entre les 2 images *)
+      sum_squared_diff := !sum_squared_diff +. (diff *. diff)  (* Somme des différences au carré *)
+    done;
+  done;
+  let mse = !sum_squared_diff /. (float_of_int (m * n)) in (* Moyenne des erreurs au carré *)
+  if mse = 0. then
+    infinity (* Si mse = 0, PSNR est infini *)
+  else
+    let max_val_sq = max_value *. max_value in
+    10. *. log10 (max_val_sq /. mse) in
+
+let psnr_red = psnr array_image_red image_red_compresse 255. in
+let psnr_green = psnr array_image_green image_green_compresse 255. in
+let psnr_blue = psnr array_image_blue image_blue_compresse 255. in
+let psnr_total = (psnr_red +. psnr_green +. psnr_blue) /. 3. in
+Printf.printf "PSNR [r,v,b] : \027[34m[%.2f, %.2f, %.2f]\027[0m, Total : \027[34m%.2f\027[0m\n" psnr_red psnr_green psnr_blue psnr_total;
+
 (* Sauvegarde de l'image compressé *)
 Graphics.open_graph "";
 let graphe_image_compresse = Graphics.make_image image_compresse_array_array in
-let file_dest = Printf.sprintf "../documentation/compresse/image_compresse_%s_%.2f.jpeg" file_name taux_compression in
+let file_dest = Printf.sprintf "../documentation/compresse/osmium_%s_[psnr=%.2f,tx=%.1f].jpeg" file_name psnr_total taux_compression in
 if (Sys.file_exists "../documentation/compresse") = false then Unix.mkdir "../documentation/compresse" 0o777; (* Création du dossier compresse s'il n'existe pas pour éviter les erreurs *)
 Jpeg.save file_dest [] (Images.Rgb24 (Graphic_image.image_of graphe_image_compresse));
 Printf.printf "Résultat : \027[31m%d octets\027[0m => \027[32m%d octets\027[0m (-%d o) pour un taux de compression de \027[34m%.1f\027[0m\n" (Unix.stat image).Unix.st_size (Unix.stat file_dest).Unix.st_size ((Unix.stat image).Unix.st_size - (Unix.stat file_dest).Unix.st_size) taux_compression;
