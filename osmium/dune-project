@@ -5,7 +5,7 @@
 (generate_opam_files true)
 
 (source
- (github username/reponame))
+ (github Maxime-Cllt/Osmium))
 
 (authors "Maxime Colliat & Rahman Yimaz")
 
@@ -23,4 +23,4 @@
  (tags
   (topics "to describe" your project)))
 
-; See the complete stanza docs at https://dune.readthedocs.io/en/stable/dune-files.html#dune-project
+; See the complete stanza docs at https://github.com/Maxime-Cllt/Osmium

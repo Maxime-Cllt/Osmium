@@ -42,13 +42,13 @@ opam install camlimages
 
 ## Exécution
 
-Pour exécuter le programme, vous pouvez utiliser la commande suivante :
+Pour exécuter le programme, vous pouvez utiliser la commande suivante dans /src :
 
 ```bash
 dune exec osmium
 ```
 
-ou bien dans /src :
+Ou bien dans /src :
 
 ```bash
 make

@@ -69,7 +69,6 @@ let make_compression array compression_rate =
 (*        let non_zero_s = Array.of_list (List.filter (fun x -> x <> 0. ) (Array.to_list array_s)) in *)
         (vecMat_u_comp, vecMat_s_comp, vecMat_vT_comp, vecMat_inter, vecMat_res) in
 
-    assert(compression_rate <= 1.);
         (*  M        N     MxN/NxN  bool *)
     let (nb_row, nb_column, matrix, padded) = init_var array in
         (*  MxN       N       NxN *)
@@ -85,21 +84,19 @@ let make_compression array compression_rate =
 
 
 (* Compression de la matrice de couleur *)
- let compress_and_convert_color_matrix color_array taux_compression message =
-  Printf.printf "Compression de la matrice %s...\n" message;
+ let compress_and_convert_color_matrix color_array taux_compression =
   let float_array = convert_array_int_to_float color_array in
       let compressed_array = make_compression float_array taux_compression in
   convert_array_float_to_int compressed_array;;
 
 
   (* Compression des 3 matrices de couleurs en utilisant le multi-threading *)
-  let compress_color_matrix_with_thread color_array taux_compression message =
+  let compress_color_matrix_with_thread color_array taux_compression =
     let compressed_array_ref = ref None in
     let compress_func () =
-      compressed_array_ref := Some (compress_and_convert_color_matrix color_array taux_compression message) in
+      compressed_array_ref := Some (compress_and_convert_color_matrix color_array taux_compression) in
     let thread = Thread.create compress_func () in
     thread, compressed_array_ref;; (* Return :  le thread et la référence de la matrice compressée *)
-
 
 
 (* [fusion_color_components r g b] prend en argument trois matrices de taille (n, m) où n est le nombre de lignes et m le nombre de colonnes de l'image.

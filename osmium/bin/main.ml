@@ -1,14 +1,29 @@
- let start = Unix.gettimeofday () in (* Temps d'exécution *)
 
- let image = "../documentation/images/gmk166x100.jpeg" in
+(* let image = "../documentation/images/gmk166x100.jpeg" in *)
 (* let image = "../documentation/images/ws200x200.jpeg" in *)
 (* let image = "../documentation/images/gg950x500.jpeg" in *)
 (* let image = "../documentation/images/gg1000.jpeg" in *)
 (* let image = "../documentation/images/CL1600x1000.jpeg" in *)
 (* let image = "../documentation/images/lh2560x1707.jpg" in *)
+(*  *)
+ try
+  let _ = Sys.argv.(1) in
+  let _ = Sys.argv.(2) in
+  ()
+ with
+    | Invalid_argument _ -> Printf.printf "Le nombre d'arguments est incorrect\n"; exit 1
+    | Failure _ -> Printf.printf "Erreur lors de la conversion des arguments\n"; exit 1
+ ;;
+
+  let start = Unix.gettimeofday () in (* Temps d'exécution *)
+
+ let image = Sys.argv.(1) in
+ let taux_compression = float_of_string Sys.argv.(2) in
 
 let file_name = Filename.chop_extension (Filename.basename image) in (* Nom du fichier sans l'extension *)
-let taux_compression = 0.01 in
+(* let taux_compression = 0.01 in *)
+
+(*  Printf.printf "Arguments : %s\n" (String.concat ", " (get_args ())); *)
 
 (* Ouverture de l'image *)
 let type_array_array_image = Graphic_image.array_of_image (Jpeg.load image []) in
@@ -17,14 +32,14 @@ let type_array_array_image = Graphic_image.array_of_image (Jpeg.load image []) i
 let (array_image_red, array_image_green, array_image_blue) = Osmium.get_array_color type_array_array_image in
 
 (* (* Compression des 3 matrices de couleurs en mono thread *) *)
-(* let image_red_compresse = Compressing.compress_and_convert_color_matrix array_image_red "rouge" in *)
-(* let image_green_compresse = Compressing.compress_and_convert_color_matrix array_image_green "vert" in *)
-(* let image_blue_compresse = Compressing.compress_and_convert_color_matrix array_image_blue "bleu" in *)
+(* let image_red_compresse = Compressing.compress_and_convert_color_matrix array_image_red in *)
+(* let image_green_compresse = Compressing.compress_and_convert_color_matrix array_image_green  in *)
+(* let image_blue_compresse = Compressing.compress_and_convert_color_matrix array_image_blue in *)
 
 (* Compression des 3 matrices de couleurs en multi thread *)
-let (thread_red, image_red_compresse) = Osmium.compress_color_matrix_with_thread array_image_red taux_compression "rouge" in
-let (thread_green, image_green_compresse) = Osmium.compress_color_matrix_with_thread array_image_green taux_compression "vert" in
-let (thread_blue, image_blue_compresse) = Osmium.compress_color_matrix_with_thread array_image_blue taux_compression "bleu" in
+let (thread_red, image_red_compresse) = Osmium.compress_color_matrix_with_thread array_image_red taux_compression in
+let (thread_green, image_green_compresse) = Osmium.compress_color_matrix_with_thread array_image_green taux_compression in
+let (thread_blue, image_blue_compresse) = Osmium.compress_color_matrix_with_thread array_image_blue taux_compression in
 
 (* Attente de la fin des threads *)
 Thread.join thread_red;
@@ -42,7 +57,7 @@ let image_blue_compresse = check_image !image_blue_compresse in
 
 (* Affichage de l'image originale *)
 let image_compresse_array_array = Osmium.fusion_color_components image_red_compresse image_green_compresse image_blue_compresse in
-Printf.printf "Image originale : \027[34m[%dx%d]\027[0m,  Finale : \027[34m[%dx%d]\027[0m\n" (Array.length array_image_red) (Array.length array_image_red.(0)) (Array.length image_compresse_array_array) (Array.length image_compresse_array_array.(0));
+Printf.printf "Originale : \027[34m[%dx%d]\027[0m,  Finale : \027[34m[%dx%d]\027[0m\n" (Array.length array_image_red) (Array.length array_image_red.(0)) (Array.length image_compresse_array_array) (Array.length image_compresse_array_array.(0));
 
 let psnr_red = Osmium.psnr array_image_red image_red_compresse 255. in
 let psnr_green = Osmium.psnr array_image_green image_green_compresse 255. in
