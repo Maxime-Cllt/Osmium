@@ -2,7 +2,8 @@
 
  let image = "../documentation/images/gmk166x100.jpeg" in
 (* let image = "../documentation/images/ws200x200.jpeg" in *)
-(* let image = "../documentation/images/ngannou1000x500.jpg" in *)
+(* let image = "../documentation/images/gg950x500.jpeg" in *)
+(* let image = "../documentation/images/gg1000.jpeg" in *)
 (* let image = "../documentation/images/CL1600x1000.jpeg" in *)
 (* let image = "../documentation/images/lh2560x1707.jpg" in *)
 
@@ -13,7 +14,7 @@ let taux_compression = 0.01 in
 let type_array_array_image = Graphic_image.array_of_image (Jpeg.load image []) in
 
 (* Récupération des 3 matrices de couleurs *)
-let (array_image_red, array_image_green, array_image_blue) = Affichage.get_colors type_array_array_image in
+let (array_image_red, array_image_green, array_image_blue) = Osmium.get_array_color type_array_array_image in
 
 (* (* Compression des 3 matrices de couleurs en mono thread *) *)
 (* let image_red_compresse = Compressing.compress_and_convert_color_matrix array_image_red "rouge" in *)
@@ -21,9 +22,9 @@ let (array_image_red, array_image_green, array_image_blue) = Affichage.get_color
 (* let image_blue_compresse = Compressing.compress_and_convert_color_matrix array_image_blue "bleu" in *)
 
 (* Compression des 3 matrices de couleurs en multi thread *)
-let (thread_red, image_red_compresse) = Compressing.compress_color_matrix_with_thread array_image_red taux_compression "rouge" in
-let (thread_green, image_green_compresse) = Compressing.compress_color_matrix_with_thread array_image_green taux_compression "vert" in
-let (thread_blue, image_blue_compresse) = Compressing.compress_color_matrix_with_thread array_image_blue taux_compression "bleu" in
+let (thread_red, image_red_compresse) = Osmium.compress_color_matrix_with_thread array_image_red taux_compression "rouge" in
+let (thread_green, image_green_compresse) = Osmium.compress_color_matrix_with_thread array_image_green taux_compression "vert" in
+let (thread_blue, image_blue_compresse) = Osmium.compress_color_matrix_with_thread array_image_blue taux_compression "bleu" in
 
 (* Attente de la fin des threads *)
 Thread.join thread_red;
@@ -31,21 +32,21 @@ Thread.join thread_green;
 Thread.join thread_blue;
 
 (* Récupération des matrices compressées *)
-let get_image image_compresse = match image_compresse with
+let check_image image_compresse = match image_compresse with
   | Some x -> x
   | None -> failwith "Erreur lors de la compression de la matrice" in
 
-let image_red_compresse = get_image !image_red_compresse in
-let image_green_compresse = get_image !image_green_compresse in
-let image_blue_compresse = get_image !image_blue_compresse in
+let image_red_compresse = check_image !image_red_compresse in
+let image_green_compresse = check_image !image_green_compresse in
+let image_blue_compresse = check_image !image_blue_compresse in
 
 (* Affichage de l'image originale *)
-let image_compresse_array_array = Affichage.assign_value image_red_compresse image_green_compresse image_blue_compresse in
+let image_compresse_array_array = Osmium.fusion_color_components image_red_compresse image_green_compresse image_blue_compresse in
 Printf.printf "Image originale : \027[34m[%dx%d]\027[0m,  Finale : \027[34m[%dx%d]\027[0m\n" (Array.length array_image_red) (Array.length array_image_red.(0)) (Array.length image_compresse_array_array) (Array.length image_compresse_array_array.(0));
 
-let psnr_red = Affichage.psnr array_image_red image_red_compresse 255. in
-let psnr_green = Affichage.psnr array_image_green image_green_compresse 255. in
-let psnr_blue = Affichage.psnr array_image_blue image_blue_compresse 255. in
+let psnr_red = Osmium.psnr array_image_red image_red_compresse 255. in
+let psnr_green = Osmium.psnr array_image_green image_green_compresse 255. in
+let psnr_blue = Osmium.psnr array_image_blue image_blue_compresse 255. in
 let psnr_total = (psnr_red +. psnr_green +. psnr_blue) /. 3. in
 Printf.printf "PSNR [r,v,b] :  [\027[31m%.2f\027[0m,\027[32m %.2f\027[0m, \027[34m%.2f\027[0m]\027[0m, Total : \027[34m%.2f\027[0m\n" psnr_red psnr_green psnr_blue psnr_total;
 
