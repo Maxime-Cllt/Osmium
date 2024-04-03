@@ -8,78 +8,78 @@ let convert_array_float_to_int array_float =
 let convert_array_int_to_float array_int =
   Array.map (Array.map float_of_int) array_int;;
 
+(* Ajoute autant de ligne que nécessaire pour avoir une matrice carrée quand la matrice est en mode portrait (nb_ligne<nb_colonne) *)
+let add_padding_to_matrix matrix nb_row nb_column=
+    let array_matrix = Matrix.to_arrays matrix in
+    let padding = Array.make_matrix (nb_column - nb_row) nb_column 0. in
+    Matrix.of_arrays (Array.append array_matrix padding) ;;
+
 (* Effectue le compression du tableau de taille MxN selon le compression_rate (un pourcentage du rang de la matrice)
 Renvoie une matrie MxN de range K, qui est le résultat de la SVD compressée *)
-let make_compression array compression_rate =
-    (* Ajoute autant de ligne que nécessaire pour avoir une matrice carrée *)
-    let pad_matrix matrix nb_row nb_column=
-        let array_matrix = Matrix.to_arrays matrix in
-        let pad = Array.make_matrix (nb_column - nb_row) nb_column 0. in
-        Matrix.of_arrays (Array.append array_matrix pad) in
+let make_compression array_of_color taux_compression =
 
-
-    (* Initialisation des variables *)
+    (* Initialisation des variables pour la SVD *)
     let init_var array =
         let nb_row, nb_column = ((Array.length array), (Array.length array.(0))) in
         let padding = nb_row < nb_column in
         (* Padding dans le cas où l'image est en mode paysage (nb_ligne<nb_colonne)*)
-        let matrix = if padding then pad_matrix (Matrix.of_arrays array) nb_row nb_column else Matrix.of_arrays array in
+        let matrix = if padding then add_padding_to_matrix (Matrix.of_arrays array) nb_row nb_column else Matrix.of_arrays array in
         let nb_row = fst (Matrix.dims matrix) in
         nb_row, nb_column, matrix, padding in
+
     (* Effectue la Svd avec le librairie Gsl renvoie (Array(MxN), Array(N), Array(NxN)) *)
+    let exec_SVD matrice =
+        let (_, nb_column) = Matrix.dims matrice in
+        let v = Matrix.create ?init:(Some 0.) nb_column nb_column in (* NxN *) (* Les vecteurs propres sont stockés dans une matrice *)
+        let s = Vector.create ?init:(Some 0.) nb_column in (* 1xN *) (* Les valeurs singulières sont stockées dans un vecteur *)
+        let work = Vector.create ?init:(Some 0.) nb_column in (* 1xN *) (* Vecteur de travail *) (* ? init = Some 0. pour initialiser les matrices à 0 *)
 
-    let exec_svd matrix =
-        let (_, nb_column) = Matrix.dims matrix in
-        let v = Matrix.create ?init:(Some 0.) nb_column nb_column in (* NxN *)
-        let s = Vector.create ?init:(Some 0.) nb_column in (* 1xN *)
-        let work = Vector.create ?init:(Some 0.) nb_column in (* 1xN *)
-
-        let vecMat_u = Vectmat.mat_convert (`M (Matrix.copy matrix)) in (* MxN *)
-        let vecMat_v = Vectmat.mat_convert (`M v) in
-        let vecMat_s = Vectmat.vec_convert (`V s) in
+        let vecMat_U = Vectmat.mat_convert (`M (Matrix.copy matrice)) in (* MxN *)
+        let vecMat_V = Vectmat.mat_convert (`M v) in
+        let vecMat_S = Vectmat.vec_convert (`V s) in
         let vecMat_work = Vectmat.vec_convert (`V work) in
 
-        Linalg._SV_decomp ~a:vecMat_u ~v:vecMat_v ~s:vecMat_s ~work:vecMat_work; (* Renvoie la matrice v, pas la transposée*)
-        (Vectmat.to_arrays vecMat_u), (Vectmat.to_array vecMat_s), (Vectmat.to_arrays vecMat_v) in
+        Linalg._SV_decomp ~a:vecMat_U ~v:vecMat_V ~s:vecMat_S ~work:vecMat_work; (* Renvoie la matrice v, pas la transposée*)
+        (Vectmat.to_arrays vecMat_U), (Vectmat.to_array vecMat_S), (Vectmat.to_arrays vecMat_V) in
 
 
     (* Redéfinir taux de compression comme étant le pourcentage de valeur singulière à garder plutôt que le pourcentage de colonnes à garder*)
-    let compress_svd arrays_u array_s arrays_v nb_row nb_column compression_rate =
-        let nb_comp_column = int_of_float ((float_of_int (List.length (List.filter (fun x -> x <> 0. ) (Array.to_list array_s)))) *. compression_rate) in
+    let compress_svd arrays_U array_S arrays_V nb_row nb_column taux_compression =
+        let nb_comp_column = int_of_float ((float_of_int (List.length (List.filter (fun x -> x <> 0. ) (Array.to_list array_S)))) *. taux_compression) in
 
-        let vecMat_u_comp = Vectmat.mat_convert (`M (Matrix.of_arrays (Array.map (fun row -> Array.sub row 0 nb_comp_column) arrays_u))) in (* Compression de u en matrice de taille MxK*)
+        let vecMat_U_comp = Vectmat.mat_convert (`M (Matrix.of_arrays (Array.map (fun row -> Array.sub row 0 nb_comp_column) arrays_U))) in (* Compression de u en matrice de taille MxK*)
 
-        let array_s_comp = Array.sub array_s 0 nb_comp_column in (* Compression du tableau des valeurs singulières *)
-        let vecMat_s_comp_array = Matrix.to_arrays (Matrix.create ?init:(Some 0.) nb_comp_column nb_comp_column) in (* Conversion de s en matrice de taille KxK pour faire un produit matriciel *)
-        Array.iteri (fun i valeur_singuliere -> vecMat_s_comp_array.(i).(i) <- valeur_singuliere) array_s_comp; (* assignation de valeur dans la diagonale *)
-        let vecMat_s_comp = Vectmat.mat_convert (`M (Matrix.of_arrays vecMat_s_comp_array)) in
+        let array_S_comp = Array.sub array_S 0 nb_comp_column in (* Compression du tableau des valeurs singulières *)
+        let vecMat_S_comp_array = Matrix.to_arrays (Matrix.create ?init:(Some 0.) nb_comp_column nb_comp_column) in (* Conversion de s en matrice de taille KxK pour faire un produit matriciel *)
+        Array.iteri (fun i valeur_singuliere -> vecMat_S_comp_array.(i).(i) <- valeur_singuliere) array_S_comp; (* assignation de valeur dans la diagonale *)
+        let vecMat_S_comp = Vectmat.mat_convert (`M (Matrix.of_arrays vecMat_S_comp_array)) in
 
-        let mat_vT_comp = Matrix.create nb_comp_column nb_column in (* Création de la matrice transposée KxN *)
-        let mat_v_comp = Matrix.of_arrays (Array.map (fun row -> Array.sub row 0 nb_comp_column) arrays_v) in (* Compression en matrice de taille NxK *)
-        Matrix.transpose mat_vT_comp mat_v_comp;
-        let vecMat_vT_comp = Vectmat.mat_convert (`M mat_vT_comp) in
+        let mat_VT_comp = Matrix.create nb_comp_column nb_column in (* Création de la matrice transposée KxN *)
+        let mat_V_comp = Matrix.of_arrays (Array.map (fun row -> Array.sub row 0 nb_comp_column) arrays_V) in (* Compression en matrice de taille NxK *)
+        Matrix.transpose mat_VT_comp mat_V_comp;
+        let vecMat_VT_comp = Vectmat.mat_convert (`M mat_VT_comp) in
 
         let vecMat_inter = Vectmat.mat_convert (`M (Matrix.create ?init:(Some 0.) nb_row nb_comp_column)) in (* MxK *)
         let vecMat_res = Vectmat.mat_convert (`M (Matrix.create ?init:(Some 0.) nb_row nb_column)) in (* MxN *)
 
-        let sum_all_SV = Array.fold_left (+.) 0. array_s in
-        let sum_comp_SV = Array.fold_left (+.) 0. array_s_comp in
+        let sum_all_SV = Array.fold_left (+.) 0. array_S in (* Somme de toutes les valeurs singulières *)
+        let sum_comp_SV = Array.fold_left (+.) 0. array_S_comp in (* Somme des valeurs singulières compressées *)
         let ratio = sum_comp_SV /. sum_all_SV in
         Printf.printf "La qualité de reconstruction est de \027[34m%.4f\n\027[0m" ratio;
 (*        let non_zero_s = Array.of_list (List.filter (fun x -> x <> 0. ) (Array.to_list array_s)) in *)
-        (vecMat_u_comp, vecMat_s_comp, vecMat_vT_comp, vecMat_inter, vecMat_res) in
+        (vecMat_U_comp, vecMat_S_comp, vecMat_VT_comp, vecMat_inter, vecMat_res) in
 
         (*  M        N     MxN/NxN  bool *)
-    let (nb_row, nb_column, matrix, padded) = init_var array in
+    let (nb_row, nb_column, matrix, padded) = init_var array_of_color in
         (*  MxN       N       NxN *)
-    let (arrays_u, array_s, arrays_v) = exec_svd matrix in
+    let (arrays_u, array_s, arrays_v) = exec_SVD matrix in
         (*     MxK          KxK            KxN             MxK           MxN     avec K le rang de la matrice renvoyée, calculé avec le taux de compression*)
-    let (vecMat_u_comp, vecMat_s_comp, vecMat_vT_comp, vecMat_inter, vecMat_res) = compress_svd arrays_u array_s arrays_v nb_row nb_column compression_rate in
+    let (vecMat_u_comp, vecMat_s_comp, vecMat_vT_comp, vecMat_inter, vecMat_res) = compress_svd arrays_u array_s arrays_v nb_row nb_column taux_compression in
 
     Linalg.matmult ~a:vecMat_u_comp ~b:vecMat_s_comp vecMat_inter; (* MxK *)
     Linalg.matmult ~a:vecMat_inter ~b:vecMat_vT_comp vecMat_res; (* MxN *)
 
-    if padded then Array.sub (Vectmat.to_arrays vecMat_res) 0 (Array.length array) (* Renvoie la matrice compressée sans les lignes ajoutées pour le padding*)
+    if padded then Array.sub (Vectmat.to_arrays vecMat_res) 0 (Array.length array_of_color) (* Renvoie la matrice compressée sans les lignes ajoutées pour le padding*)
     else Vectmat.to_arrays vecMat_res;; (* Renvoie la matrice compressée*)
 
 
@@ -90,7 +90,7 @@ let make_compression array compression_rate =
   convert_array_float_to_int compressed_array;;
 
 
-  (* Compression des 3 matrices de couleurs en utilisant le multi-threading *)
+  (* Compression des 3 matrices de couleurs en utilisant le multi-threading (pas fonctionnelle) *)
   let compress_color_matrix_with_thread color_array taux_compression =
     let compressed_array_ref = ref None in
     let compress_func () =

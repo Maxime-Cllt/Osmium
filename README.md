@@ -1,5 +1,42 @@
 <h1 align="center">Osmium</h1>
 
+<div align="center">
+<table>
+  <tr>
+    <td>
+        Original
+    </td>
+    <td>
+        Taux : 1.0
+    </td>
+    <td>
+        Taux : 0.5
+    </td>
+    </tr>
+  <tr>
+    <td>
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="100" height="100" alt="Image original">
+    </td>
+    <td>
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="100" height="100" alt="Image compressé">
+    </td>
+ <td>
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="100" height="100" alt="Image compressé">
+    </td>
+    </tr>
+    <tr>
+    <td>
+        103.17 KB
+    </td>
+    <td>
+        60.96 KB
+    </td>
+    <td>
+        56.9 KB
+    </td>
+    </tr>
+</table>
+</div>
 
 Ce projet vise à implémenter la méthode de compression d'images en utilisant la décomposition en valeurs singulières (
 SVD) comme présentée par Hervé Abdi dans son article "Singular Value Decomposition (SVD) and Generalized Singular Value
