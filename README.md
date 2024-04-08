@@ -15,13 +15,13 @@
     </tr>
   <tr>
     <td>
-       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="100" height="100" alt="Image original">
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="200" height="200" alt="Image original">
     </td>
     <td>
-       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="100" height="100" alt="Image compressé">
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="200" height="200" alt="Image compressé">
     </td>
  <td>
-       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="100" height="100" alt="Image compressé">
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/compresse/osmium_ia1200x800_%5Bpsnr%3D51.14%2Ctx%3D0.50%5D.jpeg" width="200" height="200" alt="Image compressé">
     </td>
     </tr>
     <tr>
@@ -64,17 +64,10 @@ Avant de pouvoir exécuter le programme, assurez-vous d'avoir installé les dép
 - camlimages
 - dune
 
-Vous pouvez installer OCaml en utilisant Opam, le gestionnaire de paquets pour OCaml. Pour installer OCamlgsl, vous
-pouvez utiliser Opam également :
+Vous pouvez installer OCaml en utilisant Opam, le gestionnaire de paquets pour OCaml.
 
 ```bash
-opam install ocamlgsl
-```
-
-Pour installer la librairie camlimages, vous pouvez utiliser la commande suivante :
-
-```bash
-opam install camlimages
+opam install ocamlgsl|ocamlgraphics|camlimages|dune
 ```
 
 ## Exécution
@@ -82,13 +75,7 @@ opam install camlimages
 Pour exécuter le programme, vous pouvez utiliser la commande suivante dans /src :
 
 ```bash
-dune exec osmium
-```
-
-Ou bien dans /src :
-
-```bash
-make
+dune exec osmium <chemin_vers_image> <taux_de_compression>
 ```
 
 ## Auteurs
