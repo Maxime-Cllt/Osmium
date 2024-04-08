@@ -15,13 +15,13 @@
     </tr>
   <tr>
     <td>
-       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="200" height="200" alt="Image original">
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="300" height="300" alt="Image original">
     </td>
     <td>
-       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/ia1200x800.jpeg" width="200" height="200" alt="Image compressé">
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/images/osmium_ia1200x800_%5Bpsnr%3D51.37%2Ctx%3D1.0%5D.jpeg" width="300" height="300" alt="Image compressé">
     </td>
  <td>
-       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/compresse/osmium_ia1200x800_%5Bpsnr%3D51.14%2Ctx%3D0.50%5D.jpeg" width="200" height="200" alt="Image compressé">
+       <img src="https://github.com/Maxime-Cllt/Osmium/blob/main/documentation/compresse/osmium_ia1200x800_%5Bpsnr%3D51.14%2Ctx%3D0.50%5D.jpeg" width="300" height="300" alt="Image compressé">
     </td>
     </tr>
     <tr>
