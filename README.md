@@ -25,13 +25,13 @@
     </td>
     </tr>
     <tr>
-    <td>
+    <td align="center">
         103.17 KB
     </td>
-    <td>
+    <td align="center">
         60.96 KB
     </td>
-    <td>
+    <td align="center">
         56.9 KB
     </td>
     </tr>
@@ -57,12 +57,12 @@ calculs nécessaires à la décomposition en valeurs singulières et à la compr
 
 Avant de pouvoir exécuter le programme, assurez-vous d'avoir installé les dépendances suivantes :
 
-- oCaml
-- opam
-- gsl
-- graphics
-- camlimages
-- dune
+- <b>OCaml</b> : Langage de programmation fonctionnel
+- <b>Opam</b> : Gestionnaire de paquets pour OCaml
+- <b>OCamlgsl</b> : Interface OCaml pour la GNU Scientific Library
+- <b>OCamlgraphics</b> : Interface OCaml pour la bibliothèque graphique X11
+- <b>Camlimages</b> : Bibliothèque OCaml pour la manipulation d'images
+- <b>Dune</b> : Outil de construction pour les projets OCaml
 
 Vous pouvez installer OCaml en utilisant Opam, le gestionnaire de paquets pour OCaml.
 
@@ -76,6 +76,12 @@ Pour exécuter le programme, vous pouvez utiliser la commande suivante dans /src
 
 ```bash
 dune exec osmium <chemin_vers_image> <taux_de_compression>
+```
+
+Exemple :
+
+```bash
+dune exec osmium "/images/img.jpeg" 1.0
 ```
 
 ## Auteurs
