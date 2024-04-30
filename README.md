@@ -53,6 +53,13 @@ des fichiers d'images tout en préservant les informations essentielles.
 Nous utilisons la librairie OCamlgsl, qui est une interface avec la GNU Scientific Library (GSL), pour effectuer les
 calculs nécessaires à la décomposition en valeurs singulières et à la compression des images.
 
+## Compatibilité
+
+<p align="center">
+    <img src="https://img.shields.io/badge/OS-MacOS-informational?style=flat&logo=apple&logoColor=white&color=2bbc8a" alt="MacOS" />
+    <img src="https://img.shields.io/badge/OS-Linux-informational?style=flat&logo=linux&logoColor=white&color=2bbc8a" alt="Linux" />
+</p>
+
 ## Dépendances
 
 Avant de pouvoir exécuter le programme, assurez-vous d'avoir installé les dépendances suivantes :
@@ -72,7 +79,7 @@ opam install ocamlgsl|ocamlgraphics|camlimages|dune
 
 ## Exécution
 
-Pour exécuter le programme, vous pouvez utiliser la commande suivante dans /src :
+Pour exécuter le programme, vous pouvez utiliser la commande suivante dans /osmium :
 
 ```bash
 dune exec osmium <chemin_vers_image> <taux_de_compression>
@@ -82,6 +89,12 @@ Exemple :
 
 ```bash
 dune exec osmium "/images/img.jpeg" 1.0
+```
+
+Et le fichier Makefile vous permet de compiler le programme en utilisant la commande suivante :
+
+```bash
+make
 ```
 
 ## Auteurs
