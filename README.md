@@ -1,6 +1,5 @@
 <h1 align="center">Osmium</h1>
 
-<div align="center">
 <table>
   <tr>
     <td>
@@ -36,7 +35,11 @@
     </td>
     </tr>
 </table>
-</div>
+
+L'osmium est un élément chimique de symbole Os et de numéro atomique 76. C'est le plus dense des éléments naturels, avec une densité de 22,59 g/cm³.
+Le nom osmium est dérivé du mot grec osme, qui signifie "odeur", en référence à l'odeur désagréable de ses composés volatils.
+Le lien entre l'osmium et l'image est que l'osmium est un élément très dense, comme peuvent l'être les images non compressées, c'est donc l'intérêt de ce projet de compresser ces images pour les rendre moins lourdes.
+
 
 Ce projet vise à implémenter la méthode de compression d'images en utilisant la décomposition en valeurs singulières (
 SVD) comme présentée par Hervé Abdi dans son article "Singular Value Decomposition (SVD) and Generalized Singular Value
