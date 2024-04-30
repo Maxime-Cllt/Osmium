@@ -11,16 +11,17 @@
 
 (maintainers "Maxime Colliat <")
 
-(license LICENSE)
+(license MIT)
 
-(documentation https://url/to/documentation)
+(documentation https://github.com/Maxime-Cllt/Osmium)
 
 (package
  (name osmium)
  (synopsis "SVD and GSVD in OCaml")
- (description "See README.md for more information.")
+ (description "Osmium is a library for Singular Value Decomposition (SVD) in OCaml.")
  (depends ocaml dune)
  (tags
-  (topics "to describe" your project)))
+  (mathematics linear-algebra))
+    (libraries osmium))
 
 ; See the complete stanza docs at https://github.com/Maxime-Cllt/Osmium
