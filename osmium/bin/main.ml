@@ -38,4 +38,5 @@ if (Sys.file_exists "../documentation/compresse") = false then Unix.mkdir "../do
 Jpeg.save file_dest [] (Images.Rgb24 (Graphic_image.image_of graphe_image_compresse));
 Graphics.close_graph ();
 Printf.printf "Résultat : \027[31m%d octets\027[0m => \027[32m%d octets\027[0m (-%d o) pour un taux de compression de \027[34m%.2f\027[0m\n" (Unix.stat image).Unix.st_size (Unix.stat file_dest).Unix.st_size ((Unix.stat image).Unix.st_size - (Unix.stat file_dest).Unix.st_size) taux_compression;
+Printf.printf "Fichier sauvegardé sous le nom : \027[34m%s\027[0m\n" file_dest;
 Printf.printf "Temps d'exécution : \027[34m%.3f\027[0m secondes\n" (Unix.gettimeofday () -. start_chrono)
