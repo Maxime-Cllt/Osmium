@@ -1,11 +1,5 @@
 open Gsl;;
 
-(* Ajoute autant de ligne que nécessaire pour avoir une matrice carrée quand la matrice est en mode portrait (nb_ligne<nb_colonne) *)
-let add_padding_to_matrix matrix nb_row nb_column=
-  let array_matrix = Matrix.to_arrays matrix in
-  let padding = Array.make_matrix (nb_column - nb_row) nb_column 0. in
-  Matrix.of_arrays (Array.append array_matrix padding) ;;
-
 (* Convertit un tableau de float en tableau de int *)
 let convert_array_float_to_int array_float =
   Array.map (Array.map int_of_float) array_float;;
@@ -14,6 +8,11 @@ let convert_array_float_to_int array_float =
 let convert_array_int_to_float array_int =
   Array.map (Array.map float_of_int) array_int;;
 
+(* Ajoute autant de ligne que nécessaire pour avoir une matrice carrée quand la matrice est en mode portrait (nb_ligne<nb_colonne) *)
+let add_padding_to_matrix matrix nb_ligne nb_colonne=
+  let array_matrix = Matrix.to_arrays matrix in
+  let padding = Array.make_matrix (nb_colonne - nb_ligne) nb_colonne 0. in
+  Matrix.of_arrays (Array.append array_matrix padding) ;;
 
 (* Initialisation des variables pour la SVD *)
 let init_var array =
@@ -56,9 +55,9 @@ let compress_SVD arrays_U array_S arrays_V nb_row nb_column taux_compression =
   let vecMat_inter = Vectmat.mat_convert (`M (Matrix.create ?init:(Some 0.) nb_row nb_comp_column)) in (* MxK *)
   let vecMat_res = Vectmat.mat_convert (`M (Matrix.create ?init:(Some 0.) nb_row nb_column)) in (* MxN *)
 
-  let sum_all_SV = Array.fold_left (+.) 0. array_S in (* Somme de toutes les valeurs singulières *)
-  let sum_comp_SV = Array.fold_left (+.) 0. array_S_comp in (* Somme des valeurs singulières compressées *)
-  Printf.printf "Reconstruction de \027[34m%.4f\n\027[0m" (sum_comp_SV /. sum_all_SV);
+  let somme_all_SV = Array.fold_left (+.) 0. array_S in (* Somme de toutes les valeurs singulières *)
+  let somme_comp_SV = Array.fold_left (+.) 0. array_S_comp in (* Somme des valeurs singulières compressées *)
+  Printf.printf "Reconstruction de \027[34m%.4f\n\027[0m" (somme_comp_SV /. somme_all_SV);
   (vecMat_U_comp, vecMat_S_comp, vecMat_VT_comp, vecMat_inter, vecMat_res);;
 
 (* Effectue le compression du tableau de taille MxN selon le compression_rate (un pourcentage du rang de la matrice)
@@ -83,15 +82,15 @@ let make_compression_of_matrice array_of_color taux_compression =
 Chaque matrice contient les valeurs des composantes rouge, verte et bleue de chaque pixel de l'image.
 La fonction retourne une matrice de taille (NM) où n est le nombre de lignes et m le nombre de colonnes de l'image.
 Chaque pixel de la matrice retournée contient les valeurs des composantes rouge, verte et bleue de chaque pixel de l'image. *)
-let fusion_color_components r g b =
-  let nb_rows = Array.length r in
-  let nb_columns = Array.length r.(0) in
-  let combined_image = Array.make_matrix nb_rows nb_columns 0 in
+let fusion_color_components array_red array_green array_blue =
+  let nb_lignes = Array.length array_red in
+  let nb_columns = Array.length array_red.(0) in
+  let combined_image = Array.make_matrix nb_lignes nb_columns 0 in
 
-  for i = 0 to nb_rows - 1 do
-    let row_r = r.(i) in
-    let row_g = g.(i) in
-    let row_b = b.(i) in
+  for i = 0 to nb_lignes - 1 do
+    let row_r = array_red.(i) in
+    let row_g = array_green.(i) in
+    let row_b = array_blue.(i) in
     for j = 0 to nb_columns - 1 do
       combined_image.(i).(j) <- Graphics.rgb row_r.(j) row_g.(j) row_b.(j) (* Push des valeurs RGB dans le pixel *)
     done

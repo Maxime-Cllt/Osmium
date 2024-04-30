@@ -50,7 +50,7 @@ des fichiers d'images tout en préservant les informations essentielles.
 
 ## Méthode
 
-Nous utiliserons la librairie OCamlgsl, qui est une interface avec la GNU Scientific Library (GSL), pour effectuer les
+Nous utilisons la librairie OCamlgsl, qui est une interface avec la GNU Scientific Library (GSL), pour effectuer les
 calculs nécessaires à la décomposition en valeurs singulières et à la compression des images.
 
 ## Dépendances
