@@ -1,7 +1,7 @@
 (executable
  (public_name osmium)
  (name main)
- (libraries camlimages.graphics camlimages.jpeg gsl osmium)
+ (libraries camlimages.graphics camlimages.jpeg gsl threads osmium)
  (modules osmium main))
 
 

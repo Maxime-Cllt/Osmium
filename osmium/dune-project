@@ -21,7 +21,6 @@
  (description "Osmium is a library for Singular Value Decomposition (SVD) in OCaml.")
  (depends ocaml dune)
  (tags
-  (mathematics linear-algebra))
-    (libraries osmium))
+  (math linear-algebra svd gsvd ocaml)))
 
 ; See the complete stanza docs at https://github.com/Maxime-Cllt/Osmium
